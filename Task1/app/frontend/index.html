@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EKS Microservices Demo</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .container {
+      background: white;
+      width: 500px;
+      margin: auto;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    .status {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🚀 EKS Microservices Demo</h1>
+    <p>Frontend → Backend → PostgreSQL</p>
+
+    <div id="status" class="status">Checking backend connection...</div>
+
+    <button onclick="fetchMessage()">Refresh</button>
+  </div>
+
+  <script>
+    async function fetchMessage() {
+      const statusElement = document.getElementById("status");
+      statusElement.textContent = "Connecting...";
+      statusElement.className = "status";
+
+      try {
+        const response = await fetch("/api/message");
+        const data = await response.json();
+
+        statusElement.textContent = data.message + " | Time: " + data.timestamp;
+        statusElement.className = "status success";
+
+      } catch (error) {
+        statusElement.textContent = "❌ Backend connection failed";
+        statusElement.className = "status error";
+      }
+    }
+
+    // Call automatically on page load
+    fetchMessage();
+  </script>
+
+</body>
+</html>
