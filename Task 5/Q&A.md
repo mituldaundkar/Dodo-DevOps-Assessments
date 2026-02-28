@@ -10,10 +10,10 @@ Istio works using the sidecar proxy model. For every pod, Istio injects a sideca
 
 This solves several problems:
 
-*Provides automatic mTLS encryption between services.*
-*Enables traffic control like routing, canary deployments, and blue-green deployments*
-*Adds retries, timeouts, and circuit breaking without changing application code.*
-*Gives observability like metrics, logs, and tracing.*
+- Provides automatic mTLS encryption between services.
+- Enables traffic control like routing, canary deployments, and blue-green deployments
+- Adds retries, timeouts, and circuit breaking without changing application code.
+- Gives observability like metrics, logs, and tracing.
 
 Compared to application-level networking, Istio removes the need to write networking logic inside each service. It centralizes traffic management, improves security, and makes the system easier to manage and scale.
 
