@@ -28,9 +28,8 @@ PeerAuthentication is used to control how services authenticate each other. It m
 
 AuthorizationPolicy, on the other hand, controls who is allowed to access a service after authentication is successful. It defines access rules based on service identity, namespace, labels, etc. So it handles permission and access control.
 
-PeerAuthentication = authentication (mTLS enforcement)
-
-AuthorizationPolicy = authorization (who can access what)
+- PeerAuthentication = authentication (mTLS enforcement)
+- AuthorizationPolicy = authorization (who can access what)
 
 To enforce strict mTLS across all services in a namespace, we can create a PeerAuthentication resource in that namespace with "mtls.mode: STRICT". This ensures that all service-to-service communication inside that namespace is encrypted and authenticated using mutual TLS.
 
@@ -50,15 +49,15 @@ How I Would Configure a Canary Deployment
 
 Let’s say I have two versions of a service:
 
-*v1 → stable version
+*v1 → stable version*
 
-v2 → new version
-*
+*v2 → new version*
+
 Both versions are deployed in Kubernetes with labels like:
 
-*version: v1
+*version: v1*
 
-version: v2*
+*version: v2*
 
 **Step 1: Create a DestinationRule**
 
@@ -125,11 +124,9 @@ A standard Kubernetes Ingress controller also exposes services to external traff
 
 The main differences are:
 
-*Istio Ingress Gateway is integrated with the service mesh and supports advanced traffic management like canary deployments, traffic shifting, mTLS, authentication, authorization, retries, and observability.
-
-Kubernetes Ingress controller mainly handles simple routing rules and SSL termination.
-
-Istio provides deeper control and security because it works with sidecar proxies and mesh policies.*
+- Istio Ingress Gateway is integrated with the service mesh and supports advanced traffic management like canary deployments, traffic shifting, mTLS, authentication, authorization, retries, and observability.
+- Kubernetes Ingress controller mainly handles simple routing rules and SSL termination.
+- Istio provides deeper control and security because it works with sidecar proxies and mesh policies.*\
 
 In simple terms, a Kubernetes Ingress controller is for basic external access, while Istio Ingress Gateway provides advanced traffic management and security as part of the service mesh.
 
@@ -141,21 +138,16 @@ Istio improves observability by automatically collecting metrics, logs, and trac
 
 Since every request passes through the Envoy sidecar proxy, Istio can capture detailed information like:
 
-*Request count
-
-Latency
-
-Error rates
-
-Source and destination service*
+- Request count
+- Latency
+- Error rates
+- Source and destination service
 
 For monitoring and visualization:
 
-*Prometheus collects metrics from the Envoy sidecars and Istio control plane.
-
-Grafana connects to Prometheus and provides dashboards to visualize traffic, latency, and error rates.
-
-For distributed tracing, Istio integrates with tools like Jaeger or Zipkin. Envoy generates trace data, which is sent to Jaeger so we can see the full request flow across multiple microservices.*
+- Prometheus collects metrics from the Envoy sidecars and Istio control plane.
+- Grafana connects to Prometheus and provides dashboards to visualize traffic, latency, and error rates.
+- For distributed tracing, Istio integrates with tools like Jaeger or Zipkin. Envoy generates trace data, which is sent to Jaeger so we can see the full request flow across multiple microservices.*
 
 In simple terms:
 Envoy sidecars generate metrics and traces → Prometheus collects metrics → Grafana visualizes them → Jaeger shows end-to-end request tracing.
