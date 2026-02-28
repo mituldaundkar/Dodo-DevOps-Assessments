@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: yourdockerhub/frontend:latest
+          image: mituldaundkar/frontend:latest
           ports:
             - containerPort: 3000
           resources:
