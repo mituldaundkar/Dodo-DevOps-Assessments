@@ -9,14 +9,14 @@ In a microservices architecture, services constantly talk to each other. Instead
 Istio works using the sidecar proxy model. For every pod, Istio injects a sidecar container (usually Envoy). All incoming and outgoing traffic from the application goes through this sidecar proxy. So services don’t communicate directly — they communicate through their proxies.
 
 This solves several problems:
-*
+**
     Provides automatic mTLS encryption between services
 
     Enables traffic control like routing, canary deployments, and blue-green deployments
 
     Adds retries, timeouts, and circuit breaking without changing application code
 
-    Gives observability like metrics, logs, and tracing*
+    Gives observability like metrics, logs, and tracing**
 
 Compared to application-level networking, Istio removes the need to write networking logic inside each service. It centralizes traffic management, improves security, and makes the system easier to manage and scale.
 
