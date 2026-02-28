@@ -9,14 +9,13 @@ In a microservices architecture, services constantly talk to each other. Instead
 Istio works using the sidecar proxy model. For every pod, Istio injects a sidecar container (usually Envoy). All incoming and outgoing traffic from the application goes through this sidecar proxy. So services don’t communicate directly — they communicate through their proxies.
 
 This solves several problems:
-**
     Provides automatic mTLS encryption between services
 
     Enables traffic control like routing, canary deployments, and blue-green deployments
 
     Adds retries, timeouts, and circuit breaking without changing application code
 
-    Gives observability like metrics, logs, and tracing**
+    Gives observability like metrics, logs, and tracing
 
 Compared to application-level networking, Istio removes the need to write networking logic inside each service. It centralizes traffic management, improves security, and makes the system easier to manage and scale.
 
@@ -65,7 +64,8 @@ version: v2*
 
 **Step 1: Create a DestinationRule**
 
-`apiVersion: networking.istio.io/v1beta1
+```console
+apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: my-service
@@ -77,7 +77,8 @@ spec:
       version: v1
   - name: v2
     labels:
-      version: v2`
+      version: v2
+```
 
 This tells Istio that v1 and v2 are two versions of the same service.
 
@@ -87,7 +88,8 @@ Now I define how traffic should be split.
 
 Example: 90% to v1 and 10% to v2 (canary).
 
-`apiVersion: networking.istio.io/v1beta1
+```console
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: my-service
@@ -103,7 +105,8 @@ spec:
     - destination:
         host: my-service
         subset: v2
-      weight: 10`
+      weight: 10
+```
 
 Now:
 90% of users go to stable version
