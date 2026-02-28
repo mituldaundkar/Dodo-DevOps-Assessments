@@ -1,0 +1,81 @@
+    pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3'
+        jdk 'JDK17'
+    }
+
+    environment {
+        DOCKER_IMAGE = "yourdockerhubusername/java-app"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                sh 'mvn clean test'
+            }
+        }
+
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker push $DOCKER_IMAGE:$BUILD_NUMBER
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Staging') {
+            steps {
+                sh '''
+                kubectl set image deployment/java-app \
+                java-app=$DOCKER_IMAGE:$BUILD_NUMBER -n staging
+                '''
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                input message: "Deploy to Production?"
+                sh '''
+                kubectl set image deployment/java-app \
+                java-app=$DOCKER_IMAGE:$BUILD_NUMBER -n production
+                '''
+            }
+        }
+    }
+
+    post {
+        failure {
+            sh 'kubectl rollout undo deployment/java-app -n production'
+        }
+    }
+}
