@@ -1,0 +1,1 @@
+This folder contains the **"Task 5"** questions and answers, in the file **"Q&A.md"**.
