@@ -1,0 +1,58 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: ms-cluster
+  region: ap-south-1
+  version: "1.29"
+
+# Enable IAM OIDC (Required for ALB Ingress Controller & IRSA)
+iam:
+  withOIDC: true
+
+# Enable CloudWatch logging (recommended for production)
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+
+vpc:
+  cidr: "10.0.0.0/16"
+  nat:
+    gateway: HighlyAvailable
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: true
+
+availabilityZones:
+  - ap-south-1a
+  - ap-south-1b
+  - ap-south-1c
+
+managedNodeGroups:
+  - name: production-ng
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 4
+    volumeSize: 20
+    volumeType: gp3
+    amiFamily: AmazonLinux2
+    ssh:
+      allow: false
+    privateNetworking: true
+
+    labels:
+      role: worker
+      environment: production
+
+    tags:
+      Environment: production
+      Project: eks-microservices
+      ManagedBy: eksctl
+
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        albIngress: true
+        ebs: true
+        cloudWatch: true
