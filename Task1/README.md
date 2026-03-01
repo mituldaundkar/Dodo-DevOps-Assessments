@@ -48,3 +48,43 @@ kubectl get svc -n production
 kubectl get ingress -n production
 kubectl get hpa -n production
 ```
+
+### Horizontal Pod Autoscaler
+
+Backend configuration:
+- Min replicas: 2
+- Max replicas: 6
+- CPU target: 60%
+
+Check status:
+
+```console
+kubectl describe hpa backend-hpa -n production
+```
+*(Actual screenshot images are also available in the Task 1 directory)*
+
+### Security Best Practices Implemented
+
+- Namespace isolation
+- Resource requests & limits
+- Non-root containers
+- Read-only root filesystem
+- Secrets separated from ConfigMaps
+- No hardcoded credentials
+- Stateful workload isolation
+- Controlled autoscaling
+
+## Note on Instance Type & Resource Constraints
+
+This cluster was provisioned using **t3.small** instances due to **AWS Free Tier** limitations. As a result, available CPU and memory resources are limited.
+
+Because of these constraints, some pods (particularly backend and database components) may experience:
+
+- Delayed scheduling
+- Restart loops under load
+- Resource throttling
+- Limited autoscaling behavior
+
+In a production environment, this workload should run on at least **t3.medium** or **larger** instances to ensure stable performance and proper scaling.
+
+This limitation does not affect the architectural design or deployment methodology, but only the available runtime resources.
