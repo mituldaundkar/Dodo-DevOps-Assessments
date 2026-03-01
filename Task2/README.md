@@ -1,4 +1,4 @@
-# Java CI/CD Pipeline with Blue-Green Deployment
+# Task 2: CI/CD Pipeline
 
 This project demonstrates a complete CI/CD pipeline for a Java application using:
 

@@ -1,4 +1,4 @@
-# Production-Grade Microservices Deployment on AWS EKS
+# Task 1: Kubernetes Cluster Setup & Microservices Deployment
 
 This project demonstrates a production-style deployment of a 3-tier microservices application on Amazon EKS using fully declarative Kubernetes YAML manifests.
 
