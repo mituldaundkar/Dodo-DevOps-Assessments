@@ -1,4 +1,4 @@
-    pipeline {
+pipeline {
     agent any
 
     tools {
@@ -7,7 +7,9 @@
     }
 
     environment {
-        DOCKER_IMAGE = "yourdockerhubusername/java-app"
+        DOCKER_IMAGE = "mituldaundkar/java-app"
+        ACTIVE_COLOR = "blue"
+        NEW_COLOR = "green"
     }
 
     stages {
@@ -53,29 +55,36 @@
             }
         }
 
-        stage('Deploy to Staging') {
+        stage('Deploy to Green Environment') {
             steps {
-                sh '''
-                kubectl set image deployment/java-app \
-                java-app=$DOCKER_IMAGE:$BUILD_NUMBER -n staging
-                '''
+                sh """
+                kubectl set image deployment/java-app-green \
+                java-app=$DOCKER_IMAGE:$BUILD_NUMBER \
+                -n production
+                kubectl rollout status deployment/java-app-green -n production
+                """
             }
         }
 
-        stage('Deploy to Production') {
+        stage('Manual Approval to Switch Traffic') {
             steps {
-                input message: "Deploy to Production?"
-                sh '''
-                kubectl set image deployment/java-app \
-                java-app=$DOCKER_IMAGE:$BUILD_NUMBER -n production
-                '''
+                input message: "Switch traffic to GREEN environment?"
+            }
+        }
+
+        stage('Switch Traffic to Green') {
+            steps {
+                sh """
+                kubectl patch service java-app-service -n production \
+                -p '{"spec":{"selector":{"app":"java-app","version":"green"}}}'
+                """
             }
         }
     }
 
     post {
         failure {
-            sh 'kubectl rollout undo deployment/java-app -n production'
+            echo "Deployment failed. Keeping traffic on BLUE."
         }
     }
 }
