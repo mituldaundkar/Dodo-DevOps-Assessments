@@ -33,7 +33,7 @@ docker build -t mituldaundkar/frontend:latest Task1/app/frontend
 docker push mituldaundkar/backend:latest
 docker push mituldaundkar/frontend:latest
 ```
-![images screenshot](https://Task1\image.png)
+![images screenshot](Task1\image.png)
 
 ### Deploy Application
 
