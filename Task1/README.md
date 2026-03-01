@@ -33,7 +33,6 @@ docker build -t mituldaundkar/frontend:latest Task1/app/frontend
 docker push mituldaundkar/backend:latest
 docker push mituldaundkar/frontend:latest
 ```
-![images screenshot](./docker images.png)
 
 ### Deploy Application
 
@@ -61,7 +60,6 @@ Check status:
 ```console
 kubectl describe hpa backend-hpa -n production
 ```
-*(Actual screenshot images are also available in the Task 1 directory)*
 
 ### Security Best Practices Implemented
 
@@ -88,3 +86,5 @@ Because of these constraints, some pods (particularly backend and database compo
 In a production environment, this workload should run on at least **t3.medium** or **larger** instances to ensure stable performance and proper scaling.
 
 This limitation does not affect the architectural design or deployment methodology, but only the available runtime resources.
+
+***(Actual screenshot images are also available in the Task 1 directory)***
