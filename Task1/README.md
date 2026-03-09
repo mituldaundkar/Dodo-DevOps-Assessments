@@ -21,7 +21,7 @@ User → AWS ALB Ingress → Frontend → Backend API → PostgreSQL
 ## EKS Cluster Setup
 
 ```console
-eksctl create cluster -f infrastructure/eks-cluster.yaml -n production
+eksctl create cluster -f ms-cluster.yaml -n production
 ```
 
 ### Build & Push Docker Images
